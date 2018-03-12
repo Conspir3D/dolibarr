@@ -116,8 +116,7 @@ $line_fields = array(
 // fetch optionals attributes and labels
 $extrafields=new ExtraFields($db);
 $extralabels=$extrafields->fetch_name_optionals_label('commandedet',true);
-$extrafield_line_array=null;
-if (is_array($extrafields) && count($extrafields)>0) {
+if (count($extrafields)>0) {
 	$extrafield_line_array = array();
 }
 foreach($extrafields->attribute_label as $key=>$label)
@@ -128,7 +127,7 @@ foreach($extrafields->attribute_label as $key=>$label)
 	else {$type='xsd:string';}
 	$extrafield_line_array['options_'.$key]=array('name'=>'options_'.$key,'type'=>$type);
 }
-if (is_array($extrafield_line_array)) $line_fields=array_merge($line_fields,$extrafield_line_array);
+$line_fields=array_merge($line_fields,$extrafield_line_array);
 
 // Define other specific objects
 $server->wsdl->addComplexType(
@@ -216,8 +215,7 @@ $order_fields = array(
 // fetch optionals attributes and labels
 $extrafields=new ExtraFields($db);
 $extralabels=$extrafields->fetch_name_optionals_label('commande',true);
-$extrafield_array=null;
-if (is_array($extrafields) && count($extrafields)>0) {
+if (count($extrafields)>0) {
 	$extrafield_array = array();
 }
 foreach($extrafields->attribute_label as $key=>$label)
@@ -228,7 +226,7 @@ foreach($extrafields->attribute_label as $key=>$label)
 	else {$type='xsd:string';}
 	$extrafield_array['options_'.$key]=array('name'=>'options_'.$key,'type'=>$type);
 }
-if (is_array($extrafield_array)) $order_fields=array_merge($order_fields,$extrafield_array);
+$order_fields=array_merge($order_fields,$extrafield_array);
 
 $server->wsdl->addComplexType(
 		'order',
@@ -682,7 +680,9 @@ function createOrder($authentication,$order)
 		$newobject=new Commande($db);
 		$newobject->socid=$order['thirdparty_id'];
 		$newobject->type=$order['type'];
+		$newobject->ref_client=$order['ref_client'];
 		$newobject->ref_ext=$order['ref_ext'];
+		$newobject->ref_int=$order['ref_int'];
 		$newobject->date=dol_stringtotime($order['date'],'dayrfc');
 		$newobject->date_lim_reglement=dol_stringtotime($order['date_due'],'dayrfc');
 		$newobject->note_private=$order['note_private'];

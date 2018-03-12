@@ -134,8 +134,7 @@ $productorservice_fields = array(
 // fetch optionals attributes and labels
 $extrafields=new ExtraFields($db);
 $extralabels=$extrafields->fetch_name_optionals_label('product',true);
-$extrafield_array=null;
-if (is_array($extrafields) && count($extrafields) > 0) {
+if (count($extrafields)>0) {
 	$extrafield_array = array();
 }
 foreach($extrafields->attribute_label as $key=>$label)
@@ -147,7 +146,7 @@ foreach($extrafields->attribute_label as $key=>$label)
 	$extrafield_array['options_'.$key]=array('name'=>'options_'.$key,'type'=>$type);
 }
 
-if (is_array($extrafield_array)) $productorservice_fields=array_merge($productorservice_fields,$extrafield_array);
+$productorservice_fields=array_merge($productorservice_fields,$extrafield_array);
 
 // Define other specific objects
 $server->wsdl->addComplexType(
@@ -425,7 +424,7 @@ function getProductOrService($authentication,$id='',$ref='',$ref_ext='',$lang=''
             	$extrafields=new ExtraFields($db);
             	$extralabels=$extrafields->fetch_name_optionals_label('product',true);
             	//Get extrafield values
-            	$product->fetch_optionals();
+            	$product->fetch_optionals($product->id,$extralabels);
 
             	foreach($extrafields->attribute_label as $key=>$label)
             	{
@@ -1056,7 +1055,8 @@ function getProductsForCategory($authentication,$id,$lang='')
 						if($obj->status > 0 )
 						{
 							$dir = (!empty($conf->product->dir_output)?$conf->product->dir_output:$conf->service->dir_output);
-							$pdir = get_exdir($obj->id,2,0,0,$product,'product') . $obj->id ."/photos/";
+							//$pdir = get_exdir($obj->id,2,0,0,$product,'product') . $obj->id ."/photos/";
+                            $pdir = $obj->ref.'/';
 							$dir = $dir . '/'. $pdir;
 
 							$products[] = array(
@@ -1096,7 +1096,7 @@ function getProductsForCategory($authentication,$id,$lang='')
 							$extrafields=new ExtraFields($db);
 							$extralabels=$extrafields->fetch_name_optionals_label('product',true);
 							//Get extrafield values
-							$obj->fetch_optionals();
+							$obj->fetch_optionals($obj->id,$extralabels);
 
 							foreach($extrafields->attribute_label as $key=>$label)
 							{
