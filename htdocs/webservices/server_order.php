@@ -683,6 +683,7 @@ function createOrder($authentication,$order)
 		$newobject->ref_client=$order['ref_client'];
 		$newobject->ref_ext=$order['ref_ext'];
 		$newobject->ref_int=$order['ref_int'];
+		$newobject->ref_client=$order['ref_client'];
 		$newobject->date=dol_stringtotime($order['date'],'dayrfc');
 		$newobject->date_lim_reglement=dol_stringtotime($order['date_due'],'dayrfc');
 		$newobject->note_private=$order['note_private'];
